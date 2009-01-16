@@ -1,0 +1,42 @@
+Lleïr Borràs i Metje
+<memtest AT gmail DOT com>
+
+This is a plugin that helps you generating pdf files. Php is needed to run it.
+
+This plugin uses http://html2pdf.spipu.net/
+
+I will put some more info, but here is an example.
+
+##config/environment.rb
+require 'render_as_pdf'
+
+##CONTROLLER
+class ReportsController < ApplicationController
+  def show
+    @report = Report.find(params[:id])
+
+    respond_to do |format|
+      format.pdf{
+        pdf_data=render_as_pdf(:template => "/cens/show.html.erb" , :layout => false)
+        send_data(pdf_data, :type => "application/pdf", :filename => "some_name.pdf")
+      }
+    end
+  end
+end
+
+##VIEW
+<style type="text/css">
+/*Som styles*/
+</style>
+
+<page backtop="10mm" backbottom="10mm" orientation="paysage">
+  <page_header>
+    <!-->Here yout header<-->
+  </page_header>
+
+  <page_footer>
+    <!-->Here yout footer<-->
+  </page_footer>
+
+  <!-->Here your data<-->
+</page>
