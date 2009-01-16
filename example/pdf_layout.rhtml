@@ -1,0 +1,59 @@
+<!-- HTML2PDF_POST_PROCESSING_DIRECTIVES
+media: A4
+page_width: 800
+cssmedia: screen
+pdfversion: 1.5
+// PAGE WIDTH (in pixel)
+// MARGIN DEFINITION (in mm)
+margin_left:10
+margin_right:10
+margin_top:10
+margin_bottom:10
+footerhtml: <%= @footer %>
+toc:false
+renderimages: 1
+HTML2PDF_POST_PROCESSING_DIRECTIVES -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>PDF export</title>
+    <style type="text/css">
+      body, h1, ol, ul, li, p, input, table {
+        font-family: geneva,verdana,arial,sans-serif;
+        font-size: 8pt;
+        line-height: 9pt;
+        color: #000;}
+      p.footer {font-size: 0.8em; font-family: geneva,verdana,arial,sans-serif;}
+      th, td {vertical-align: top; text-align: left;}
+      h1 {font-size: 2em;}
+      .b-all {border: 0.15em solid #000;}
+      .bb {border-bottom: 0.15em solid #000;}
+      .bt {border-top: 0.15em solid #000;}
+      .bl {border-left: 0.15em solid #000;}
+      .br {border-right: 0.15em solid #000;}
+      .bb-dotted {border-bottom: 0.15em dotted #CCC;}
+      .acenter{text-align: center;}
+      .left{text-align: left;}
+      .right{text-align: right;}
+      .grey{background: #EEE;}
+      .nw {white-space: nowrap;}
+      table.item-table tr th{vertical-align: top; font-weight:bold; padding: 0.15em 0.6em; background: #EEE;}
+      table.show-table tr th{text-align: left; vertical-align: top; font-weight:bold; padding: 0.15em 0.6em;}
+      table.item-table tr td{vertical-align: top; padding: 0.15em 0.6em;}
+      table.show-table tr td{vertical-align: top; padding: 0.15em 0.6em;}
+      span.small {font-size: 0.8em; line-height: 1em;}
+      table.small-font tr td {font-size: 0.8em; line-height: 1em;}
+      table.small-font tr th {font-size: 0.8em; line-height: 1em;}
+      table tr td.normal-font {font-size: 1em; line-height: 1.2em;}
+      table tr th.normal-font {font-size: 1em; line-height: 1.2em;}
+      table tr td.large-font {font-size: 1.2em; line-height: 1.6em;}
+      table tr th.large-font {font-size: 1.2em; line-height: 1.6em;}
+    </style>
+  </head>
+  <body>
+    <%= yield %>
+  </body>
+</html>
+
