@@ -38,7 +38,7 @@ if (!defined('__CLASS_FPDF_CODEBAR__'))
 {
 	define('__CLASS_FPDF_CODEBAR__', true);
 	
-	require_once(dirname(__FILE__).'/../_fpdf/fpdf.php');		// classe fpdf de Olivier PLATHEY 
+	require_once(dirname(__FILE__).'/../_fpdf/fpdf.php');
 
 	class FPDF_Codebar extends FPDF
 	{

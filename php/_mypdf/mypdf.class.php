@@ -6,7 +6,7 @@
  * Distribué sous la licence GPL. 
  *
  * @author		Laurent MINGUET <webmaster@spipu.net>
- * @version		3.17 - 30/12/2008
+ * @version		3.21 - 05/05/2009
  */
 
 if (!defined('__CLASS_MYPDF__'))
@@ -72,7 +72,7 @@ if (!defined('__CLASS_MYPDF__'))
 			}
 		}
 		
-		// redéfinition de la fonction Image de FPDF afin de rajouter la gestion des fichiers PHP, et du clip
+		// redéfinition de la fonction Image de FPDF afin de rajouter la gestion des fichiers PHP
 		function Image($file, $x=null, $y=null, $w=0, $h=0, $type='', $link='')
 		{
 			//Put an image on the page

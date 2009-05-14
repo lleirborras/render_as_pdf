@@ -6,7 +6,12 @@
  * Distribué sous la licence GPL. 
  *
  * @author		Laurent MINGUET <webmaster@spipu.net>
+ * 
+ * isset($_GET['vuehtml']) n'est pas obligatoire
+ * il permet juste d'afficher le résultat au format HTML
+ * si le paramètre 'vuehtml' est passé en paramètre _GET
  */
+ 
  $generate = isset($_GET['make_pdf']);
  $nom = isset($_GET['nom']) ? $_GET['nom'] : 'inconnu';
  

@@ -33,7 +33,7 @@ if (!defined('__CLASS_FPDF_PROTECTION__'))
 {
 	define('__CLASS_FPDF_PROTECTION__', true);
 	
-	require_once(dirname(__FILE__).'/01_fpdf_formulaire.class.php');		// classe fpdf_formulaire
+	require_once(dirname(__FILE__).'/02_fpdf_formulaire.class.php');
 	
 	class FPDF_Protection extends FPDF_Formulaire
 	{
@@ -108,18 +108,6 @@ if (!defined('__CLASS_FPDF_PROTECTION__'))
 		function _objectkey($n)
 		{
 			return substr($this->_md5_16($this->encryption_key.pack('VXxx',$n)),0,10);
-		}
-	
-		/**
-		* Escape special characters
-		*/
-		function _escape($s)
-		{
-			$s=str_replace('\\','\\\\',$s);
-			$s=str_replace(')','\\)',$s);
-			$s=str_replace('(','\\(',$s);
-			$s=str_replace("\r",'\\r',$s);
-			return $s;
 		}
 	
 		function _putresources()

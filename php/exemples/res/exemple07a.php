@@ -6,13 +6,14 @@ td		{ vertical-align: top; }
 }
 -->
 </style>
-<page backimg="./res/bas_page.png" backimgx="center" backimgy="bottom" backimgw="100%" backtop="0" backbottom="30mm" footer="date;heure;page" style="font-size: 12pt">
+<page backcolor="#FEFEFE" backimg="./res/bas_page.png" backimgx="center" backimgy="bottom" backimgw="100%" backtop="0" backbottom="30mm" footer="date;heure;page" style="font-size: 12pt">
+	<bookmark title="Lettre" level="0" ></bookmark>
 	<table cellspacing="0" style="width: 100%; text-align: center; font-size: 14px">
 		<tr>
 			<td style="width: 75%;">
 			</td>
 			<td style="width: 25%; color: #444444;">
-				<img style="width: 100%;" src="../_fpdf/tutorial/logo.png" alt="Logo fpdf"><br>
+				<img style="width: 100%;" src="./res/logoHTMLtoPDF.gif" alt="Logo fpdf"><br>
 				RELATION CLIENT
 			</td>
 		</tr>

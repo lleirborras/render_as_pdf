@@ -1,9 +1,10 @@
 <page orientation="paysage" footer="">
+	<bookmark title="Document" level="0" ></bookmark>
 	<a name="document_reprise"></a>
 	<table cellspacing="0" style="width: 100%;">
 		<tr>
 			<td style="width: 10%;">
-				<img style="width: 100%" src="../_fpdf/tutorial/logo.png" alt="Logo fpdf" >
+				<img style="width: 100%" src="./res/logoHTMLtoPDF.gif" alt="Logo fpdf" >
 			</td>
 			<td style="width: 80%; text-align: center; text-decoration: underline; font-weight: bold; font-size: 20pt;">
 				<span style="font-size: 10pt"><br></span>

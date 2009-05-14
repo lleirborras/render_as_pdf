@@ -3,7 +3,7 @@
 	table.page_header {width: 100%; border: none; background-color: #DDDDFF; border-bottom: solid 1mm #AAAADD; padding: 2mm }
 	table.page_footer {width: 100%; border: none; background-color: #DDDDFF; border-top: solid 1mm #AAAADD; padding: 2mm}
 	div.note {border: solid 1mm #DDDDDD;background-color: #EEEEEE; padding: 2mm; border-radius: 2mm 2mm; width: 100%; }
-	ul.main { width: 95%;  list-style-type: square; }
+	ul.main { width: 95%; list-style-type: square; }
 	ul.main li { padding-bottom: 2mm; }
 	h1 { text-align: center; font-size: 20mm}
 	h3 { text-align: center; font-size: 14mm}
@@ -32,15 +32,18 @@
 					page [[page_cu]]/[[page_nb]]
 				</td>
 				<td style="width: 33%; text-align: right">
-					&copy;Spipu 2008
+					&copy;Spipu 2008-2009
 				</td>
 			</tr>
 		</table>
 	</page_footer>
-	<br><br><br><br><br><br><br><br><br><br><br><br>
+	<bookmark title="Présentation" level="0" ></bookmark>	
+	<br><br><br><br><br><br><br><br>
 	<h1>HTML2PDF</h1>
-	<h3>v<?php echo __CLASS_HTML2PDF__; ?></h3>
-	<br><br><br><br><br><br><br><br><br><br><br><br>
+	<h3>v<?php echo __CLASS_HTML2PDF__; ?></h3><br>
+	<br><br><br><br><br><br>
+	<img src="./res/logoHTMLtoPDF.gif" alt="Logo HTML2PDF" style="text-align: center; width: 150mm">
+	<br><br><br><br><br><br>
 	<div class="note">
 		HTML2PDF est un convertisseur de code HTML vers PDF écrit en PHP4, utilisant la librairie <a href="http://fpdf.org">Fpdf d'Olivier PLATHEY.</a><br>
 		<br>
@@ -52,6 +55,9 @@
 	</div>
 </page>
 <page pageset="old">
+	<bookmark title="Compatibilité" level="0" ></bookmark>	
+	<bookmark title="Balises HTML" level="1" ></bookmark>	
+	<bookmark title="Balises classiques" level="2" ></bookmark>	
 	<div class="note">
 		La liste des balises HTML utilisables est la suivante :<br>
 	</div>
@@ -76,23 +82,26 @@
 		<li>&lt;sup&gt; :	Exemple<sup>haut</sup>.</li>
 		<li>&lt;sub&gt; :	Exemple<sub>bas</sub>.</li>
 		<li>&lt;u&gt; :		Texte <u>souligné</u></li>
-		<li>&lt;table&gt;, &lt;td&gt;, &lt;th&gt;,  &lt;tr&gt;,  &lt;thead&gt;,  &lt;tbody&gt;</li>
+		<li>&lt;table&gt;, &lt;td&gt;, &lt;th&gt;, &lt;tr&gt;, &lt;thead&gt;, &lt;tbody&gt;, &lt;tfoot&gt;</li>
 		<li>&lt;ol&gt;, &lt;ul&gt;, &lt;li&gt;</li>
 		<li>&lt;form&gt;, &lt;input&gt;, &lt;textarea&gt;, &lt;select&gt;, &lt;option&gt;</li>
 	</ul>
+	<bookmark title="Balises spécifiques" level="2" ></bookmark>	
 	<div class="note">
 		Les balises spécifiques suivantes ont été ajoutées :<br>
 	</div>
 	<br>
-	<ul  class="main" >
+	<ul class="main" >
 		<li>&lt;page&gt;</li>
 		<li>&lt;page_header&gt;</li>
 		<li>&lt;page_footer&gt;</li>
 		<li>&lt;nobreak&gt;</li>
 		<li>&lt;barcode&gt;</li>
+		<li>&lt;bookmark&gt;</li>
 	</ul>
 </page>
 <page pageset="old">
+	<bookmark title="Styles CSS" level="1" ></bookmark>	
 	<div class="note">
 		La liste des styles CSS utilisables est la suivante :<br>
 	</div>
@@ -100,7 +109,7 @@
 	<table style="width: 100%">
 		<tr style="vertical-align: top">
 			<td style="width: 50%">
-				<ul  class="main">
+				<ul class="main">
 					<li>color</li>
 					<li>font-family</li>
 					<li>font-weight</li>
@@ -112,6 +121,7 @@
 					<li>vertical-align</li>
 					<li>width</li>
 					<li>height</li>
+					<li>line-height</li>
 					<li>padding</li>
 					<li>padding-top</li>
 					<li>padding-right</li>
@@ -127,13 +137,14 @@
 					<li>bottom</li>
 					<li>left</li>
 					<li>right</li>
+					<li>float</li>
 					<li>list-style</li>
 					<li>list-style-type</li>
 					<li>list-style-image</li>
 				</ul>
 			</td>
 			<td style="width: 50%">
-				<ul  class="main">
+				<ul class="main">
 					<li>background</li>
 					<li>background-color</li>
 					<li>background-image</li>
@@ -165,6 +176,7 @@
 			</td>
 		</tr>
 	</table>
+	<bookmark title="Propriétés" level="1" ></bookmark>	
 	<div class="note">
 		La liste des propriétés utilisables est la suivante :<br>
 	</div>
@@ -172,7 +184,7 @@
 	<table style="width: 100%">
 		<tr style="vertical-align: top">
 			<td style="width: 50%">
-				<ul  class="main">
+				<ul class="main">
 					<li>cellpadding</li>
 					<li>cellspacing</li>
 					<li>colspan</li>
@@ -182,7 +194,7 @@
 				</ul>
 			</td>
 			<td style="width: 50%">
-				<ul  class="main">
+				<ul class="main">
 					<li>align</li>
 					<li>valign</li>
 					<li>bgcolor</li>
@@ -195,12 +207,13 @@
 	</table>
 </page>
 <page pageset="old">
+	<bookmark title="Limitations" level="0" ></bookmark>	
 	<div class="note">
 		Cette librairie comporte des limitations :<br>
 	</div>
 	<br>
-	<ul  class="main">
-		<li>Les float ne sont pas gérés.</li>
+	<ul class="main">
+		<li>Les float ne sont gérés que pour la balise IMG.</li>
 		<li>Lors de l'utilisation de text-align avec les valeurs right et center, le positionnement des éléments les un par rapport aux autres ne marche pas.</li>
 		<li>Elle ne permet généralement pas la conversion directe d'une page HTML en PDF, ni la conversion du résultat d'un WYSIWYG en PDF.</li>
 		<li>Cette librairie est là pour faciliter la génération de documents PDF, pas pour convertir n'importe quelle page HTML.</li>

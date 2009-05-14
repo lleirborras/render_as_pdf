@@ -6,92 +6,17 @@
  * Distribué sous la licence GPL. 
  *
  * @author		Laurent MINGUET <webmaster@spipu.net>
+ * 
+ * isset($_GET['vuehtml']) n'est pas obligatoire
+ * il permet juste d'afficher le résultat au format HTML
+ * si le paramètre 'vuehtml' est passé en paramètre _GET
  */
+ 	// récupération du contenu HTML
  	ob_start();
-?>
-<style type="text/css">
-<!--
-table
-{
-	padding: 0;
-	border:	solid 1mm LawnGreen;
-	font-size:	12pt;
-}
-
-td
-{
-	padding:	1mm;
-	border: solid 1mm black;
-	text-align:	center;
-}
--->
-</style>
-<page backcolor="#AACCFF" backleft="5mm" backright="5mm" backtop="10mm" backbottom="10mm" >
-	<table cellspacing="4" style="background: #FFFFFF">
-		<tr>
-			<td>a A1</td>
-			<td>aa A2</td>
-			<td>aaa A3</td>
-			<td>aaaa A4</td>
-		</tr>
-		<tr>
-			<td rowspan="2">B1</td>
-			<td style="font-size: 16pt">B2</td>
-			<td colspan="2">B3</td>
-		</tr>
-		<tr>
-			<td>C1</td>
-			<td>C2</td>
-			<td>C3</td>
-		</tr>
-		<tr>
-			<td colspan="2">D1</td>
-			<td colspan="2">D2</td>
-		</tr>
-	</table>
-	<hr>
-	<table style="background: #FFFFFF">
-		<tr>
-			<td colspan="2">CoucouCoucou !</td>
-			<td>B</td>
-			<td>CC</td>
-		</tr>
-		<tr>
-			<td>AA</td>
-			<td colspan="2">CoucouCoucou !</td>
-			<td>CC</td>
-		</tr>
-		<tr>
-			<td>AA</td>
-			<td>B</td>
-			<td colspan="2">CoucouCoucou !</td>
-		</tr>
-	</table>
-	<hr>
-	<table style="background: #FFFFFF">
-		<tr>
-			<td>AA</td>
-			<td>AA</td>
-			<td>AA</td>
-			<td rowspan="2">AA</td>
-		</tr>
-		<tr>
-			<td>AA</td>
-			<td rowspan="2" colspan="2" >CoucouCoucou !</td>
-		</tr>
-		<tr>
-			<td>AA</td>
-			<td>CC</td>
-		</tr>
-		<tr>
-			<td colspan="2">D1</td>
-			<td colspan="2">D2</td>
-		</tr>
-	</table>
-	<hr>
-</page>
-<?php
+ 	include(dirname(__FILE__).'/res/exemple08.php');
 	$content = ob_get_clean();
+
+	// conversion HTML => PDF
 	require_once(dirname(__FILE__).'/../html2pdf.class.php');
 	$html2pdf = new HTML2PDF('P','A4', 'fr', array(0, 0, 0, 0));
 	$html2pdf->WriteHTML($content, isset($_GET['vuehtml']));

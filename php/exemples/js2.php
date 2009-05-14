@@ -6,6 +6,12 @@
  * Distribué sous la licence GPL. 
  *
  * @author		Laurent MINGUET <webmaster@spipu.net>
+ * 
+ *  IncludeJS : permet d'inclure du Javascript au format PDF
+ * 
+ * isset($_GET['vuehtml']) n'est pas obligatoire
+ * il permet juste d'afficher le résultat au format HTML
+ * si le paramètre 'vuehtml' est passé en paramètre _GET
  */
  	ob_start();
 ?>

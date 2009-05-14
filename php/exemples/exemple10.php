@@ -6,10 +6,17 @@
  * Distribué sous la licence GPL. 
  *
  * @author		Laurent MINGUET <webmaster@spipu.net>
+ * 
+ * isset($_GET['vuehtml']) n'est pas obligatoire
+ * il permet juste d'afficher le résultat au format HTML
+ * si le paramètre 'vuehtml' est passé en paramètre _GET
  */
+ 	// récupération du contenu HTML
 	ob_start();
 	include(dirname(__FILE__).'/res/exemple10.php');
 	$content = ob_get_clean();
+
+	// conversion HTML => PDF
 	require_once(dirname(__FILE__).'/../html2pdf.class.php');
 	$html2pdf = new HTML2PDF('P','A4','fr');
 	$html2pdf->WriteHTML($content, isset($_GET['vuehtml']));

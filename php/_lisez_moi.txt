@@ -4,19 +4,20 @@
 ** http://www.gnu.org/licenses/licenses.fr.html#GPL  **
 ** pour en savoir plus.                              **
 **                                                   **
-**  Copyright 2000-2008 par Laurent Minguet          **
+**  Copyright 2000-2009 par Laurent Minguet          **
 *******************************************************
 *******************************
-* HTML2PDF v3.17 - 30/12/2008 *
+* HTML2PDF v3.21 - 05/05/2009 *
 *******************************
 
 Utilisation :
 ------------
  - regardez les exemples fournis pour voir le fonctionnement.
 
- - les formulaires ne marchent QUE avec ADOBE READER 9
+ - les formulaires ne marchent QUE avec ADOBE READER 8 et ADOBE READER 9.0
  
- - il est TRES IMPORTANT de fournir du HTML 4.01 valide au convertisseur, mais seulement ce que contient le <body>
+ - il est TRES IMPORTANT de fournir du HTML 4.01 valide au convertisseur,
+   mais seulement ce que contient le <body>
 
  - pour les borders : il est conseillé qu'ils soient au format "solid 1mm #000000"
 
@@ -24,12 +25,15 @@ Utilisation :
 
  - la liste des balises HTML reconnues se trouve dans le fichier "_balises_html.xls"
 
- - la possibilité de protégé vos PDF est présente, CF Exemple 7. Elle utilise le script fpdf_protection de Klemen Vodopivec.
+ - la possibilité de protégé vos PDF est présente, CF Exemple 7. Elle utilise le script
+   fpdf_protection de Klemen Vodopivec.
 
  - Certaines balises spécifiques ont été introduites :
      * <page></page>  (CF Exemple 7) :
-      permet de définir l'orientation, les marges left, right, top et bottom, l'image et la couleur de fond d'une page, sa taille et position, le footer.
-      Il est egalement possible de garder les header et footer des pages précédentes, grace à l'attribue pageset="old" (CF Exemple 3)
+      permet de définir l'orientation, les marges left, right, top et bottom, l'image
+      et la couleur de fond d'une page, sa taille et position, le footer.
+      Il est egalement possible de garder les header et footer des pages précédentes,
+      grace à l'attribue pageset="old" (CF Exemple 3)
  
      * <page_header></page_header> (CF Exemple 3)
      
@@ -37,14 +41,43 @@ Utilisation :
      
      * <nobreak></nobreak> :
          permet de forcer l'affichage d'une partie sur une même page.
-         Si cette partie ne rentre pas dans le reste de la page, un saut de page est effectué avant.
+         Si cette partie ne rentre pas dans le reste de la page, un saut de page est
+         effectué avant.
  
-     * <barcode></barcode>  (CF Exemples 0 et 9) :
+    * <barcode></barcode>  (CF Exemples 0 et 9) :
          permet d'inserer des barcodes dans les pdfs, CF Exemples 0 et 9
-         Les types de codebar possible sont : EAN13, UPC_A, CODE39. Ceci utilise les scripts de The-eh et Olivier 
+         Les types de codebar possible sont : EAN13, UPC_A, CODE39. Ceci utilise les
+         scripts de The-eh et Olivier 
 
+     * <bookmark></bookmark>  (CF Exemples 7 et About) :
+         permet d'inserer des bookmark dans les pdfs, CF Exemple 7 et About.
+         Il est egalement possible de créer un index automatiquement en fin de
+         document, CF exemple About.
+         Ceci utilise les scripts d'Olivier et de Min's
+         
 Modification :
 -------------
+ 3.21 : ajout de la propriété css FLOAT pour la balise IMG
+        correction sur la gestion des TFOOT
+        correction sur le positionnement des images
+ 3.20 : ajout de la gestion des margins pour la balise DIV
+        ajout de la gestion de la propriete css LINE-HEIGHT
+        correction sur l'interpretation de la valeur de certains styles CSS (background-image, background-position, ...)
+        correction sur la reconnaissance des balises thead et tfoot
+        correction sur la balise select
+        correction sur les fichiers de langue (merci à Sinan)
+ 3.19 : optimisation du parseur HTML - merci à Jezelinside
+        ajout de la balise TFOOT
+        amélioration de la gestion des tableaux : les contenus des balises THEAD et TFOOT sont maintenant répétés sur chaque page.
+        ajout de la balise spécifique BOOKMARK afin de créer des "marques-page"
+        possibilité de rajouter un index automatique en fin de fichier
+        ajout de la langue turque TR (merci à Hidayet)
+        amélioration de la méthode Output. Elle est maintenant également utilisable comme celle de FPDF
+ 3.18 : correction sur les sauts de page automatique pour les balises TABLE, UL, OL
+        correction sur l'interpretation des styles pour la balise HR
+        correction sur l'interpretation du style border-collapse pour la balise TABLE
+        prise en compte de margin:auto pour les tables et les divs
+        les commentaires dans les CSS sont acceptés
  3.17 : ajout de la gestion des balises INPUT (text, radio, checkbox, button, hidden, ...), SELECT, OPTION, TEXTAREA (cf exemple 14)
         ajout de la possibilité de mettre des scripts dans le pdf, via $html2pdf->pdf->IncludeJS(...); (cf exemples JS)
         correction sur le saut de page automatique pour les images
@@ -79,7 +112,7 @@ Modification :
  3.11 : ajout des balises div, p, pre, s
         gestion des styles CSS position (relative, absolute), left, top, right, bottom  (cf exemple 10)
         meilleur gestion des border : border-style, border-color, border-width  (cf exemple 10)
-        possibilité d'indiquer les parges par défault, via le constructeur (cf exemple 2)
+        possibilité d'indiquer les marges par défault, via le constructeur (cf exemple 2)
  3.10a: correction pour compatibilité php4 / php5
  3.10 : ajout des liens internes (cf exemple 7)
         gestion complete des background : image, repeat, position, color (cf exemple 1)
@@ -135,7 +168,8 @@ Informations :
  Programmeur :	Spipu
 		email   : webmaster@spipu.net
 		site    : http://html2pdf.fr/
-		support : http://html2pdf.fr/forum.php
+        wiki    : http://html2pdf.fr/wiki.php
+        support : http://html2pdf.fr/forum.php
 		
 Remerciement :
 -------------

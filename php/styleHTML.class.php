@@ -6,7 +6,7 @@
  * Distribué sous la licence GPL. 
  *
  * @author		Laurent MINGUET <webmaster@spipu.net>
- * @version		3.17 - 30/12/2008
+ * @version		3.21 - 05/05/2009
  */
  
 if (!defined('__CLASS_STYLEHTML__'))
@@ -207,6 +207,7 @@ if (!defined('__CLASS_STYLEHTML__'))
 		{
 	 		$this->value['id_balise']			= 'body';		// balise
 			$this->value['id_name']				= null;			// name
+			$this->value['id_id']				= null;			// id
 			$this->value['id_class']			= null;			// class
 			$this->value['id_lst']				= array('*');	// lst de dependance
 			$this->value['mini-size']			= 1.;			// rapport de taille	spécifique aux sup, sub
@@ -221,6 +222,7 @@ if (!defined('__CLASS_STYLEHTML__'))
 			$this->value['text-indent']			= 0;
 			$this->value['text-align']			= 'left';
 			$this->value['vertical-align']		= 'middle';
+			$this->value['line-height']			= 'normal';
 
 			$this->value['position']			= null;
 			$this->value['x']					= null;
@@ -239,6 +241,7 @@ if (!defined('__CLASS_STYLEHTML__'))
 			$this->value['border']				= array();
 			$this->value['padding']				= array();
 			$this->value['margin']				= array();
+			$this->value['margin-auto']			= false;
 
 			$this->value['list-style-type']		= '';
 			$this->value['list-style-image']	= '';
@@ -285,7 +288,8 @@ if (!defined('__CLASS_STYLEHTML__'))
 									'b' => 0,
 									'l' => 0
 								);
-
+			$this->value['margin-auto'] = false;
+			
 			if (in_array($balise, array('div')))
 				$this->value['vertical-align']	 = 'top';
 
@@ -389,11 +393,27 @@ if (!defined('__CLASS_STYLEHTML__'))
 			
 			if ($this->value['position']=='relative' || $this->value['position']=='absolute')
 			{
-				if ($this->value['right']!==null)	$x = $this->getLastWidth(true) - $this->value['right'] - $this->value['width']; 
-				else								$x = $this->value['left'];
+				if ($this->value['right']!==null)
+				{
+					$x = $this->getLastWidth(true) - $this->value['right'] - $this->value['width'];
+					if ($this->value['margin']['r']) $x-= $this->value['margin']['r'];
+				} 
+				else
+				{
+					$x = $this->value['left'];
+					if ($this->value['margin']['l']) $x+= $this->value['margin']['l'];
+				}
 				
-				if ($this->value['bottom']!==null)	$y = $this->getLastHeight(true) - $this->value['bottom'] - $this->value['height']; 	
-				else								$y = $this->value['top'];
+				if ($this->value['bottom']!==null)
+				{
+					$y = $this->getLastHeight(true) - $this->value['bottom'] - $this->value['height'];
+					if ($this->value['margin']['b']) $y-= $this->value['margin']['b'];
+				} 	
+				else
+				{
+					$y = $this->value['top'];
+					if ($this->value['margin']['t']) $y+= $this->value['margin']['t'];
+				}
 								
 				if ($this->value['position']=='relative')
 				{
@@ -405,14 +425,13 @@ if (!defined('__CLASS_STYLEHTML__'))
 					$this->value['x'] = $this->getLastAbsoluteX()+$x;
 					$this->value['y'] = $this->getLastAbsoluteY()+$y;					
 				}
-
-				if ($this->value['margin']['l'])	$this->value['x']+= $this->value['margin']['l'];
-				if ($this->value['margin']['t'])	$this->value['y']+= $this->value['margin']['t'];
 			}
 			else
 			{
 				$this->value['x'] = $current_x;
 				$this->value['y'] = $current_y;	
+				if ($this->value['margin']['l'])	$this->value['x']+= $this->value['margin']['l'];
+				if ($this->value['margin']['t'])	$this->value['y']+= $this->value['margin']['t'];
 			}
 			
 			$current_x = $this->value['x'];
@@ -430,7 +449,8 @@ if (!defined('__CLASS_STYLEHTML__'))
 		{
 			// preparation
 			$balise = strtolower($balise);
-			$name	= isset($param['name'])		? strtolower($param['name'])	: null;
+			$id		= isset($param['id'])		? strtolower(trim($param['id']))	: null; if (!$id)	$id		= null;
+			$name	= isset($param['name'])		? strtolower(trim($param['name']))	: null; if (!$name)	$name	= null;
 
 			// lecture de la propriete classe
 			$class = array();
@@ -445,6 +465,7 @@ if (!defined('__CLASS_STYLEHTML__'))
 			// identification de la balise et des styles direct qui pourraient lui être appliqués
 			$this->value['id_balise']	= $balise;
 			$this->value['id_name']		= $name;
+			$this->value['id_id']		= $id;
 			$this->value['id_class']	= $class;
 			$this->value['id_lst']		= array();
 			$this->value['id_lst'][] = '*';
@@ -458,11 +479,11 @@ if (!defined('__CLASS_STYLEHTML__'))
 					$this->value['id_lst'][] = $balise.'.'.$v;
 				}
 			}
-			if ($name)
+			if ($id)
 			{
-				$this->value['id_lst'][] = '*#'.$name;
-				$this->value['id_lst'][] = '#'.$name;
-				$this->value['id_lst'][] = $balise.'#'.$name;
+				$this->value['id_lst'][] = '*#'.$id;
+				$this->value['id_lst'][] = '#'.$id;
+				$this->value['id_lst'][] = $id.'#'.$id;
 			}
 
 			// style CSS
@@ -515,6 +536,14 @@ if (!defined('__CLASS_STYLEHTML__'))
 					case 'color':
 						$res = null;
 						$this->value['color'] = $this->ConvertToRVB($val, $res);
+						
+						if ($balise=='hr')
+						{
+							$this->value['border']['l']['color'] = $this->value['color'];
+							$this->value['border']['t']['color'] = $this->value['color'];
+							$this->value['border']['r']['color'] = $this->value['color'];
+							$this->value['border']['b']['color'] = $this->value['color'];
+						}
 						break;
 					
 					case 'text-align':
@@ -532,6 +561,11 @@ if (!defined('__CLASS_STYLEHTML__'))
 					
 					case 'height':
 						$this->value['height'] = $this->ConvertToMM($val, $this->getLastHeight());
+						break;
+				
+					case 'line-height':
+						if (preg_match('/^[0-9\.]+$/isU', $val)) $val = floor($val*100).'%';
+						$this->value['line-height'] = $val;
 						break;
 				
 					case 'padding':
@@ -577,6 +611,11 @@ if (!defined('__CLASS_STYLEHTML__'))
 						break;
 												
 					case 'margin':
+						if ($val=='auto')
+						{
+							$this->value['margin-auto'] = true;
+							break;	
+						}
 						$val = explode(' ', $val);
 						foreach($val as $k => $v)
 						{
@@ -879,6 +918,18 @@ if (!defined('__CLASS_STYLEHTML__'))
 		}
 		
  		/**
+		 * Récupération de la hauteur de ligne courante
+		 *
+		 * @return	float	hauteur en mm
+		 */
+		function getLineHeight()
+		{
+			$val = $this->value['line-height'];
+			if ($val=='normal') $val = '108%';
+			return $this->ConvertToMM($val, $this->value['font-size']);
+		}
+		
+ 		/**
 		 * Récupération de la largeur de l'objet parent
 		 *
 		 * @return	float	largeur
@@ -924,6 +975,13 @@ if (!defined('__CLASS_STYLEHTML__'))
 			return $this->pdf->h - $this->pdf->tMargin - $this->pdf->bMargin;
 		}
 		
+		function getFloat()
+		{
+			if ($this->value['float']=='left')	return 'left';
+			if ($this->value['float']=='right')	return 'right';
+			return null;
+		}
+				
 		function getLastAbsoluteX()
 		{
 			for($k=count($this->table); $k>0; $k--)
@@ -937,7 +995,7 @@ if (!defined('__CLASS_STYLEHTML__'))
 		{
 			for($k=count($this->table); $k>0; $k--)
 			{
-				if ($this->table[$k-1]['x'] && $this->table[$k-1]['position']) return $this->table[$k-1]['y'];
+				if ($this->table[$k-1]['y'] && $this->table[$k-1]['position']) return $this->table[$k-1]['y'];
 			}
 			return $this->pdf->tMargin;
 		}
@@ -1152,8 +1210,8 @@ if (!defined('__CLASS_STYLEHTML__'))
 			else if ($val[0]=='right')	$x = '100%';
 			else if ($val[0]=='top')	$y = '0%';
 			else if ($val[0]=='bottom')	$y = '100%';
-			else if (preg_match('/^[-]?[0-9\.]+$/isU',	$val[0])) $x = $val[0];
 			else if (preg_match('/^[-]?[0-9\.]+%$/isU',	$val[0])) $x = $val[0];
+			else if ($this->ConvertToMM($val[0])) $x = $this->ConvertToMM($val[0]);
 			else $res = false;
 			
 			if ($val[1]=='left')		$x = '0%';
@@ -1161,8 +1219,8 @@ if (!defined('__CLASS_STYLEHTML__'))
 			else if ($val[1]=='top')	$y = '0%';
 			else if ($val[1]=='center')	$y = '50%';
 			else if ($val[1]=='bottom')	$y = '100%';
-			else if (preg_match('/^[-]?[0-9\.]+$/isU',	$val[1])) $y = $val[1];
 			else if (preg_match('/^[-]?[0-9\.]+%$/isU',	$val[1])) $y = $val[1];
+			else if ($this->ConvertToMM($val[1])) $y = $this->ConvertToMM($val[1]);
 			else $res = false;
 
 			$val[0] = $x;
@@ -1260,6 +1318,8 @@ if (!defined('__CLASS_STYLEHTML__'))
 			// on remplace tous les espaces, tab, \r, \n, par des espaces uniques
 			$code = preg_replace('/[\s]+/', ' ', $code);
 
+			// on enlève les commentaires
+			$code = preg_replace('/\/\*.*?\*\//s', '', $code);
 
 			// on analyse chaque style
 			preg_match_all('/([^{}]+){([^}]*)}/isU', $code, $match);
@@ -1275,7 +1335,11 @@ if (!defined('__CLASS_STYLEHTML__'))
 				foreach($styles as $style)
 				{
 					$tmp = explode(':', $style);
-					if (count($tmp)==2)	$stl[trim(strtolower($tmp[0]))] = trim($tmp[1]);
+					if (count($tmp)>1)
+					{
+						$cod = $tmp[0]; unset($tmp[0]); $tmp = implode(':', $tmp); 
+						$stl[trim(strtolower($cod))] = trim($tmp);
+					}
 				}
 				
 				// décomposition des noms par les ,

@@ -6,7 +6,7 @@
  * Distribué sous la licence GPL. 
  *
  * @author		Laurent MINGUET <webmaster@spipu.net>
- * @version		3.17 - 30/12/2008
+ * @version		3.21 - 05/05/2009
  */
  
 if (!defined('__CLASS_PARSINGHTML__'))
@@ -176,20 +176,21 @@ if (!defined('__CLASS_PARSINGHTML__'))
 		{
 			// séparer les balises du texte
 			$tmp = array();
-			preg_match_all('/(<[^>]+>)|([^<]+)+/isU', $content, $parse);
+			$reg = '/(<[^>]+>)|([^<]+)+/isU';
 
 			// pour chaque élément trouvé :
 			$str = '';
-			for($k=0; $k<count($parse[0]); $k++)
+			$offset = 0;
+			while(preg_match($reg, $content, $parse, PREG_OFFSET_CAPTURE, $offset))
 			{
 				// si une balise a été détectée
-				if ($parse[1][$k])
+				if ($parse[1][0])
 				{
 					// sauvegarde du texte précédent si il existe
 					if ($str!=='')	$tmp[] = array('txt',$str);
-
+		
 					// sauvegarde de la balise
-					$tmp[] = array('code',trim($parse[1][$k]));
+					$tmp[] = array('code',trim($parse[1][0]));
 					
 					// initialisation du texte suivant
 					$str = ''; 	
@@ -197,11 +198,15 @@ if (!defined('__CLASS_PARSINGHTML__'))
 				else
 				{
 					// ajout du texte à la fin de celui qui est déjà détecté
-					$str.= $parse[2][$k];
+					$str.= $parse[2][0];
 				}
+				// Update offset to the end of the match
+				$offset = $parse[0][1] + strlen($parse[0][0]);
+				unset($parse);					
 			}
 			// si un texte est présent à la fin, on l'enregistre
-			if ($str!='') $tmp[] = array('txt',$str); 
+			if ($str!='') $tmp[] = array('txt',$str);
+			unset($str);
 		}
 		
 		/**
@@ -314,7 +319,11 @@ if (!defined('__CLASS_PARSINGHTML__'))
 			foreach($styles as $style)
 			{
 				$tmp = explode(':', $style);
-				if (count($tmp)==2)	$param['style'][trim(strtolower($tmp[0]))] = preg_replace('/[\s]+/isU', ' ', trim($tmp[1]));
+				if (count($tmp)>1)
+				{
+					$cod = $tmp[0]; unset($tmp[0]); $tmp = implode(':', $tmp); 
+					$param['style'][trim(strtolower($cod))] = preg_replace('/[\s]+/isU', ' ', trim($tmp));
+				}
 			}
 			
 			// détermination du niveau de table pour les ouverture, avec ajout d'un level
@@ -371,7 +380,7 @@ if (!defined('__CLASS_PARSINGHTML__'))
 					{
 						if ($level==0) { $not = true; }					// si on est à la premiere balise : on l'ignore
 						$level+= ($row['close'] ? -1 : 1);				// modification du niveau en cours en fonction de l'ouvertre / fermeture
-						if ($level==0) { $not = true; $end = true; }	// si on est au niveau 0 : on a finit
+						if ($level==0) { $not = true; $end = true; }	// si on est au niveau 0 : on a fini
 					}
 					
 					// si on doit prendre en compte la balise courante
@@ -386,15 +395,14 @@ if (!defined('__CLASS_PARSINGHTML__'))
 								$tmp = '';
 								if (isset($val['text-align'])) unset($val['text-align']);
 								foreach($val as $ks => $vs) $tmp.= $ks.':'.$vs.'; ';
-								$val = $tmp;
-								if (trim($val)) $code.= ' '.$key.'="'.$tmp.'" ';
+								if (trim($tmp)) $code.= ' '.$key.'="'.$tmp.'"';
 							}
 							else
 							{
-								$code.= ' '.$key.'="'.$val.'" ';
+								$code.= ' '.$key.'="'.$val.'"';
 							}	
 						}
-						$code.= ' >';
+						$code.= '>';
 					}
 				}
 				
