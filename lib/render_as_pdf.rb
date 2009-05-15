@@ -1,7 +1,7 @@
 class RenderAsPdf 
   
   @@render_as_pdf_path = File.join(File.dirname(__FILE__), "php", "html2pdf.class.php")
-  @@temp_path = File.join(File.dirname(__FILE__), "..", "..", "..", "tmp", "pdf")
+  @@temp_path = File.join(File.dirname(__FILE__), "..", "..", "..", "..", "tmp", "pdf")
   
   @@file_header = <<-raw
 <?php
@@ -13,19 +13,21 @@ class RenderAsPdf
   cattr_accessor :temp_path
   cattr_reader :file_header
   
-  class<<self
+  class << self
   
     def generate_random_string
       chars = ("a".."z").to_a + (0..9).to_a
-      return (1..10).collect{ |a| chars[rand(chars.size)] }.join
+      (0..9).collect{chars[rand(chars.size)]}.join
     end
     
-    def generate_temp_filename
-      Dir.mkdir(temp_path) unless File.exists?(temp_path)
-      begin
-        filename = File.join(temp_path, generate_random_string)
-      end while File.exists?(filename + ".*")
-      return filename
+    def generate_temp_filename(filename = generate_random_string)
+      FileUtils.mkdir_p(temp_path) unless File.exists?(temp_path)
+      file_path= File.join(temp_path, filename)
+      if File.exists?(file_path)
+        generate_temp_filename(filename + "_")
+      else
+        file_path
+      end
     end
 
     def file_footer(file_name)
