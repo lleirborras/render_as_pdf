@@ -12,7 +12,9 @@ module RenderAsPdfFunctions
     pdf_filename = filename + ".pdf"
     File.open(php_filename, "wb") do |f|
       f.write(RenderAsPdf.file_header)
-      f.write(Iconv.new('ISO-8859-15//IGNORE//TRANSLIT', 'utf-8').iconv(html))
+      html.split("\n").each do |s|
+        f.write(Iconv.new('ISO-8859-15//IGNORE//TRANSLIT', 'utf-8').iconv(s))
+      end
       f.write(RenderAsPdf.file_footer(pdf_filename))
     end
     output = `php "#{php_filename}" > "#{pdf_filename}"`
