@@ -35,7 +35,7 @@ module RenderAsPdfFunctions
       pdf_string = f.read
       temp_filename = File.join(File.dirname(f.path), File.basename(pdf_filename, ".*"))
     end
-#    FileUtils.rm(temp_filename + ".php")
+    FileUtils.rm(temp_filename + ".php")
     FileUtils.rm(temp_filename + ".pdf")
     return pdf_string
   end
