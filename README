@@ -31,11 +31,11 @@ end
 
 <page backtop="10mm" backbottom="10mm" orientation="paysage">
   <page_header>
-    <!-->Here yout header<-->
+    <!-->Here your header<-->
   </page_header>
 
   <page_footer>
-    <!-->Here yout footer<-->
+    <!-->Here your footer<-->
   </page_footer>
 
   <!-->Here your data<-->
