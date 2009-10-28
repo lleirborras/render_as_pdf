@@ -235,4 +235,3 @@ if (!defined('__CLASS_FPDF_CODEBAR__'))
 		}
 	}
 }
-?>

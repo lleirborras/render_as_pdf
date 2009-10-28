@@ -41,13 +41,17 @@
 	<br><br><br><br><br><br><br><br>
 	<h1>HTML2PDF</h1>
 	<h3>v<?php echo __CLASS_HTML2PDF__; ?></h3><br>
-	<br><br><br><br><br><br>
-	<img src="./res/logoHTMLtoPDF.gif" alt="Logo HTML2PDF" style="text-align: center; width: 150mm">
-	<br><br><br><br><br><br>
+	<br><br><br><br><br>
+	<div style="text-align: center; width: 100%;">
+		<br>
+		<img src="./res/logoHTMLtoPDF.gif" alt="Logo HTML2PDF" style="width: 150mm">
+		<br>
+	</div>
+	<br><br><br><br><br>
 	<div class="note">
 		HTML2PDF est un convertisseur de code HTML vers PDF écrit en PHP4, utilisant la librairie <a href="http://fpdf.org">Fpdf d'Olivier PLATHEY.</a><br>
 		<br>
-		Il permet la conversion d'HTML 4.01 valide au format PDF, et est distribué sous licence GPL.<br>
+		Il permet la conversion d'HTML 4.01 valide au format PDF, et est distribué sous licence LGPL.<br>
 		<br>
 		Cette librairie a été conçue pour gérer principalement les TABLE imbriquées afin de générer des factures, bon de livraison, et autres documents officiels.<br>
 		<br>
@@ -82,9 +86,10 @@
 		<li>&lt;sup&gt; :	Exemple<sup>haut</sup>.</li>
 		<li>&lt;sub&gt; :	Exemple<sub>bas</sub>.</li>
 		<li>&lt;u&gt; :		Texte <u>souligné</u></li>
-		<li>&lt;table&gt;, &lt;td&gt;, &lt;th&gt;, &lt;tr&gt;, &lt;thead&gt;, &lt;tbody&gt;, &lt;tfoot&gt;</li>
+		<li>&lt;table&gt;, &lt;td&gt;, &lt;th&gt;, &lt;tr&gt;, &lt;thead&gt;, &lt;tbody&gt;, &lt;tfoot&gt;, &lt;col&gt; </li>
 		<li>&lt;ol&gt;, &lt;ul&gt;, &lt;li&gt;</li>
 		<li>&lt;form&gt;, &lt;input&gt;, &lt;textarea&gt;, &lt;select&gt;, &lt;option&gt;</li>
+		<li>&lt;del&gt;, &lt;ins&gt;</li>
 	</ul>
 	<bookmark title="Balises spécifiques" level="2" ></bookmark>	
 	<div class="note">
@@ -118,6 +123,7 @@
 					<li>text-decoration</li>
 					<li>text-indent</li>
 					<li>text-align</li>
+					<li>text-transform</li>
 					<li>vertical-align</li>
 					<li>width</li>
 					<li>height</li>
@@ -138,9 +144,7 @@
 					<li>left</li>
 					<li>right</li>
 					<li>float</li>
-					<li>list-style</li>
-					<li>list-style-type</li>
-					<li>list-style-image</li>
+					<li>rotate</li>
 				</ul>
 			</td>
 			<td style="width: 50%">
@@ -172,6 +176,9 @@
 					<li>border-left-style</li>
 					<li>border-left-color</li>
 					<li>border-left-width</li>
+					<li>list-style</li>
+					<li>list-style-type</li>
+					<li>list-style-image</li>
 				</ul>
 			</td>
 		</tr>
@@ -214,7 +221,6 @@
 	<br>
 	<ul class="main">
 		<li>Les float ne sont gérés que pour la balise IMG.</li>
-		<li>Lors de l'utilisation de text-align avec les valeurs right et center, le positionnement des éléments les un par rapport aux autres ne marche pas.</li>
 		<li>Elle ne permet généralement pas la conversion directe d'une page HTML en PDF, ni la conversion du résultat d'un WYSIWYG en PDF.</li>
 		<li>Cette librairie est là pour faciliter la génération de documents PDF, pas pour convertir n'importe quelle page HTML.</li>
 		<li>Les formulaires ne marchent qu'à partir de la version <b>9</b> de <b>Adobe Reader</b>.</li>

@@ -1,6 +1,6 @@
 class RenderAsPdf 
   
-  @@render_as_pdf_path = File.join(File.dirname(__FILE__), "php", "html2pdf.class.php")
+  @@render_as_pdf_path = File.join(File.dirname(__FILE__), "..", "php", "html2pdf.class.php")
   @@temp_path = File.join(File.dirname(__FILE__), "..", "..", "..", "..", "tmp", "pdf")
   
   @@file_header = <<-raw

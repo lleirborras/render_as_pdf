@@ -1,17 +1,19 @@
 *******************************************************
-** Ce programme est distribué sous la licence GPL,   **
-** reportez-vous au fichier _GPL.txt ou à            **
-** http://www.gnu.org/licenses/licenses.fr.html#GPL  **
+** Ce programme est distribué sous la licence LGPL,  **
+** reportez-vous au fichier _LGPL.txt ou à           **
+** http://www.gnu.org/licenses/lgpl.html             **
 ** pour en savoir plus.                              **
 **                                                   **
 **  Copyright 2000-2009 par Laurent Minguet          **
 *******************************************************
-*******************************
-* HTML2PDF v3.21 - 05/05/2009 *
-*******************************
+********************************
+* HTML2PDF v3.25 - 07/10/2009 *
+********************************
 
 Utilisation :
 ------------
+ - necessite au minimum PHP 4.3.10
+ 
  - regardez les exemples fournis pour voir le fonctionnement.
 
  - les formulaires ne marchent QUE avec ADOBE READER 8 et ADOBE READER 9.0
@@ -23,11 +25,23 @@ Utilisation :
 
  - pour les paddings : ils ne sont applicables qu'aux balises table, th, td, div, li
 
- - la liste des balises HTML reconnues se trouve dans le fichier "_balises_html.xls"
+ - Vous pouvez préciser l'encodage. Une fonte compatible doit être utilisée. Ceux acceptés sont : 
+    cp1250, cp1251, cp1252, cp1253, cp1254, cp1255, cp1257, cp1258, cp874,
+    ISO-8859-1, ISO-8859-2, ISO-8859-4, ISO-8859-5, ISO-8859-7, ISO-8859-9,
+    ISO-8859-11, ISO-8859-15, ISO-8859-16, KOI8-R, KOI8-U
+  Pour l'utiliser : $html2pdf->setEncoding('cp1250');
 
  - la possibilité de protégé vos PDF est présente, CF Exemple 7. Elle utilise le script
    fpdf_protection de Klemen Vodopivec.
 
+ - Certains tests peuvent être activés (true) ou de désactivés(false) :
+     * méthode setTestIsImage : tester que les images doivent existent bien
+     * méthode setTestTdInOnePage : tester que le contenu des TDs rentre sur une seule page
+     
+ - Un mode DEBUG permettant de connaitre les ressources utilisées lors de la construction du PDF est présente.
+   Il est activable en rajoutant la commande suivante juste après le constructeur (cf exemple 0):
+      $htmlpdf->setModeDebug();
+     
  - Certaines balises spécifiques ont été introduites :
      * <page></page>  (CF Exemple 7) :
       permet de définir l'orientation, les marges left, right, top et bottom, l'image
@@ -48,6 +62,15 @@ Utilisation :
          permet d'inserer des barcodes dans les pdfs, CF Exemples 0 et 9
          Les types de codebar possible sont : EAN13, UPC_A, CODE39. Ceci utilise les
          scripts de The-eh et Olivier 
+         
+     * <qrcode></qrcode> (CF Exemple 13) :
+         permet d'inserer un codebar à 2 dimensions de type QRcode
+         voici un exemple d'utilisation :
+           <qrcode value="votre message ici" size="1mm" ec="M" style="color: black; background-color: white"></qrcode>
+         seul le parametre "value" est obligatoire
+         les différentes valeurs de type de correction sont L, M, Q, H
+         (QR Code is registered trademark of DENSO WAVE INCORPORATED | http://www.denso-wave.com/qrcode/)
+         ATTENTION : l'utilisation des QRCODE nécessite l'utilisation de PHP5
 
      * <bookmark></bookmark>  (CF Exemples 7 et About) :
          permet d'inserer des bookmark dans les pdfs, CF Exemple 7 et About.
@@ -55,8 +78,34 @@ Utilisation :
          document, CF exemple About.
          Ceci utilise les scripts d'Olivier et de Min's
          
+     * propriété css "rotate" :
+         valeurs possibles : 0, 90, 180, 270
+         applicable uniquement sur les divs (cf exemple 8)
+         
 Modification :
 -------------
+ 3.25 : correctif sur le calcul des tableaux dans le page_footer
+        correctif sur l'interprétation des espaces entre certaines balises
+        correction sur la gestion des balises H1, H2, H3, H4, H5, H6
+        correction sur la gestion de la balise table
+        support des balises xhtml du type <span />
+        ajout des balises COL (cf exemple 5), DEL, INS, et QRCODE (cf exemple 13)
+        ajout de la propriété css text-transform
+        ajout de la propriété css rotate (uniquement sur les DIV, cf exemple 8)
+        ne plus rendre obligatoire l'existence d'une image (nouvelle méthode setTestIsImage)
+        ajout d'un mode DEBUG - les anciennes fonction d'analyse des ressources ont été supprimées
+        ajout de la méthode setEncoding
+        ajout de la langue danoise DA (merci à  Daniel K.)
+ 3.24 : correction sur le calcul de la largeur des divs
+        modification pour compatibilité avec la localisation PHP
+        modification pour compatibilité avec PHP 5.3.0
+ 3.23 : correction sur le calcul des DIVs
+        correction sur l'interpretation de certains styles CSS
+        correction de la fonction de creation d'index automatique CreateIndex
+        ATTENTION : la methode d'appel de CreateIndex a changé. Regardez l'exemple About !!!!
+ 3.22a: redistribution de HTML2PDF sous la licence LGPL !!! (au lieu de GPL)
+ 3.22 : correction sur le background-color
+        refonte totale de la gestion de text-align. les valeurs center et right marchent maintenant meme en cas de contenu riche
  3.21 : ajout de la propriété css FLOAT pour la balise IMG
         correction sur la gestion des TFOOT
         correction sur le positionnement des images

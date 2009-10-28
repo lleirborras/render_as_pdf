@@ -3,7 +3,7 @@
  * Logiciel : exemple d'utilisation de HTML2PDF
  * 
  * Convertisseur HTML => PDF, utilise fpdf de Olivier PLATHEY 
- * Distribué sous la licence GPL. 
+ * Distribué sous la licence LGPL. 
  *
  * @author		Laurent MINGUET <webmaster@spipu.net>
  *

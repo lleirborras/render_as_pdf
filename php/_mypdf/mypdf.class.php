@@ -3,10 +3,10 @@
  * Logiciel : HTML2PDF - classe MyPDF
  * 
  * Convertisseur HTML => PDF, utilise fpdf de Olivier PLATHEY 
- * Distribué sous la licence GPL. 
+ * Distribué sous la licence LGPL. 
  *
  * @author		Laurent MINGUET <webmaster@spipu.net>
- * @version		3.21 - 05/05/2009
+ * @version		3.25 - 07/10/2009
  */
 
 if (!defined('__CLASS_MYPDF__'))
@@ -47,11 +47,11 @@ if (!defined('__CLASS_MYPDF__'))
 		function Footer()
 		{ 
 			$txt = '';
-			if ($this->footer_param['form'])	$txt = (HTML2PDF::textGET('pdf05'));
-			if ($this->footer_param['date'] && $this->footer_param['heure'])	$txt.= ($txt ? ' - ' : '').(HTML2PDF::textGET('pdf03'));
-			if ($this->footer_param['date'] && !$this->footer_param['heure'])	$txt.= ($txt ? ' - ' : '').(HTML2PDF::textGET('pdf01'));
-			if (!$this->footer_param['date'] && $this->footer_param['heure'])	$txt.= ($txt ? ' - ' : '').(HTML2PDF::textGET('pdf02'));
-			if ($this->footer_param['page'])	$txt.= ($txt ? ' - ' : '').(HTML2PDF::textGET('pdf04'));
+			if ($this->footer_param['form'])	$txt = (@HTML2PDF::textGET('pdf05'));
+			if ($this->footer_param['date'] && $this->footer_param['heure'])	$txt.= ($txt ? ' - ' : '').(@HTML2PDF::textGET('pdf03'));
+			if ($this->footer_param['date'] && !$this->footer_param['heure'])	$txt.= ($txt ? ' - ' : '').(@HTML2PDF::textGET('pdf01'));
+			if (!$this->footer_param['date'] && $this->footer_param['heure'])	$txt.= ($txt ? ' - ' : '').(@HTML2PDF::textGET('pdf02'));
+			if ($this->footer_param['page'])	$txt.= ($txt ? ' - ' : '').(@HTML2PDF::textGET('pdf04'));
 			
 			$txt = str_replace('[[date_d]]',	date('d'),			$txt);
 			$txt = str_replace('[[date_m]]',	date('m'),			$txt);
@@ -165,7 +165,7 @@ if (!defined('__CLASS_MYPDF__'))
 			$points_string = '';
 			for($i=0; $i<count($points); $i+=2)
 			{
-				$points_string .= sprintf('%.2f %.2f', $points[$i]*$k, ($h-$points[$i+1])*$k);
+				$points_string .= sprintf('%.2F %.2F', $points[$i]*$k, ($h-$points[$i+1])*$k);
 				if($i==0)	$points_string .= ' m ';
 				else		$points_string .= ' l ';
 			}
@@ -356,9 +356,9 @@ if (!defined('__CLASS_MYPDF__'))
 					$MyArc = 4/3 * (sqrt(2) - 1);
 					
 					if ($coin_TL)
-						$path.= sprintf('%.2f %.2f m ', $x1+$coin_TL[0], $y1);
+						$path.= sprintf('%.2F %.2F m ', $x1+$coin_TL[0], $y1);
 					else
-						$path.= sprintf('%.2f %.2f m ', $x1, $y1);
+						$path.= sprintf('%.2F %.2F m ', $x1, $y1);
 					
 					if ($coin_TR)
 					{
@@ -367,11 +367,11 @@ if (!defined('__CLASS_MYPDF__'))
 						$xt2 = ($x2-$coin_TR[0])+$coin_TR[0];
 						$yt2 = ($y2+$coin_TR[1])-$coin_TR[1]*$MyArc;
 
-						$path.= sprintf('%.2f %.2f l ', $x2-$coin_TR[0], $y2);						
-						$path.= sprintf('%.2f %.2f %.2f %.2f %.2f %.2f c ', $xt1, $yt1, $xt2, $yt2, $x2, $y2+$coin_TR[1]);
+						$path.= sprintf('%.2F %.2F l ', $x2-$coin_TR[0], $y2);						
+						$path.= sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c ', $xt1, $yt1, $xt2, $yt2, $x2, $y2+$coin_TR[1]);
 					}
 					else
-						$path.= sprintf('%.2f %.2f l ', $x2, $y2);
+						$path.= sprintf('%.2F %.2F l ', $x2, $y2);
 
 					if ($coin_BR)
 					{
@@ -380,11 +380,11 @@ if (!defined('__CLASS_MYPDF__'))
 						$xt2 = ($x3-$coin_BR[0])+$coin_BR[0]*$MyArc;
 						$yt2 = ($y3-$coin_BR[1])+$coin_BR[1];
 
-						$path.= sprintf('%.2f %.2f l ', $x3, $y3-$coin_BR[1]);						
-						$path.= sprintf('%.2f %.2f %.2f %.2f %.2f %.2f c ', $xt1, $yt1, $xt2, $yt2, $x3-$coin_BR[0], $y3);
+						$path.= sprintf('%.2F %.2F l ', $x3, $y3-$coin_BR[1]);						
+						$path.= sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c ', $xt1, $yt1, $xt2, $yt2, $x3-$coin_BR[0], $y3);
 					}
 					else
-						$path.= sprintf('%.2f %.2f l ', $x3, $y3);
+						$path.= sprintf('%.2F %.2F l ', $x3, $y3);
 
 					if ($coin_BL)
 					{
@@ -393,11 +393,11 @@ if (!defined('__CLASS_MYPDF__'))
 						$xt2 = ($x4+$coin_BL[0])-$coin_BL[0];
 						$yt2 = ($y4-$coin_BL[1])+$coin_BL[1]*$MyArc;
 
-						$path.= sprintf('%.2f %.2f l ', $x4+$coin_BL[0], $y4);						
-						$path.= sprintf('%.2f %.2f %.2f %.2f %.2f %.2f c ', $xt1, $yt1, $xt2, $yt2, $x4, $y4-$coin_BL[1]);
+						$path.= sprintf('%.2F %.2F l ', $x4+$coin_BL[0], $y4);						
+						$path.= sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c ', $xt1, $yt1, $xt2, $yt2, $x4, $y4-$coin_BL[1]);
 					}
 					else
-						$path.= sprintf('%.2f %.2f l ', $x4, $y4);
+						$path.= sprintf('%.2F %.2F l ', $x4, $y4);
 				
 					if ($coin_TL)
 					{
@@ -406,16 +406,16 @@ if (!defined('__CLASS_MYPDF__'))
 						$xt2 = ($x1+$coin_TL[0])-$coin_TL[0]*$MyArc;
 						$yt2 = ($y1+$coin_TL[1])-$coin_TL[1];
 
-						$path.= sprintf('%.2f %.2f l ', $x1, $y1+$coin_TL[1]);						
-						$path.= sprintf('%.2f %.2f %.2f %.2f %.2f %.2f c ', $xt1, $yt1, $xt2, $yt2, $x1+$coin_TL[0], $y1);
+						$path.= sprintf('%.2F %.2F l ', $x1, $y1+$coin_TL[1]);						
+						$path.= sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c ', $xt1, $yt1, $xt2, $yt2, $x1+$coin_TL[0], $y1);
 					}
 				}
 				else
 				{
-					$path.= sprintf('%.2f %.2f m ', $x1, $y1);
-					$path.= sprintf('%.2f %.2f l ', $x2, $y2);
-					$path.= sprintf('%.2f %.2f l ', $x3, $y3);
-					$path.= sprintf('%.2f %.2f l ', $x4, $y4);
+					$path.= sprintf('%.2F %.2F m ', $x1, $y1);
+					$path.= sprintf('%.2F %.2F l ', $x2, $y2);
+					$path.= sprintf('%.2F %.2F l ', $x3, $y3);
+					$path.= sprintf('%.2F %.2F l ', $x4, $y4);
 				}
 
 				$path.= ' h W n';
@@ -456,8 +456,8 @@ if (!defined('__CLASS_MYPDF__'))
 
 			}
 
-			$path.= sprintf('%.2f %.2f m ', $ext1_x, $ext1_y);
-			$path.= sprintf('%.2f %.2f %.2f %.2f %.2f %.2f c ', $xt1, $yt1, $xt2, $yt2, $ext2_x, $ext2_y);
+			$path.= sprintf('%.2F %.2F m ', $ext1_x, $ext1_y);
+			$path.= sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c ', $xt1, $yt1, $xt2, $yt2, $ext2_x, $ext2_y);
 
 			if ($int1_x-$cen_x!=0)
 			{
@@ -475,11 +475,53 @@ if (!defined('__CLASS_MYPDF__'))
 
 			}
 			
-			$path.= sprintf('%.2f %.2f l ', $int2_x, $int2_y);
-			$path.= sprintf('%.2f %.2f %.2f %.2f %.2f %.2f c ', $xt1, $yt1, $xt2, $yt2, $int1_x, $int1_y);
+			$path.= sprintf('%.2F %.2F l ', $int2_x, $int2_y);
+			$path.= sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c ', $xt1, $yt1, $xt2, $yt2, $int1_x, $int1_y);
 
 			$this->_out($path . 'f');
 		}
+		
+		function startTransform()
+		{
+			$this->_out('q');
+		}
+		
+		function stopTransform()
+		{
+			$this->_out('Q');
+		}
+
+		function setTranslate($t_x, $t_y)
+		{
+			// matrice de transformation
+			$tm[0]=1;
+			$tm[1]=0;
+			$tm[2]=0;
+			$tm[3]=1;
+			$tm[4]=$t_x*$this->k;
+			$tm[5]=-$t_y*$this->k;
+			
+			$this->_out(sprintf('%.3F %.3F %.3F %.3F %.3F %.3F cm', $tm[0],$tm[1],$tm[2],$tm[3],$tm[4],$tm[5]));
+		}
+
+		
+		function setRotation($angle, $x='', $y='')
+		{
+			if($x === '') $x=$this->x;
+			if($y === '') $y=$this->y;
+			
+			$y=($this->h-$y)*$this->k;
+			$x*=$this->k;
+			
+			// matrice de transformation
+			$tm[0]=cos(deg2rad($angle));
+			$tm[1]=sin(deg2rad($angle));
+			$tm[2]=-$tm[1];
+			$tm[3]=$tm[0];
+			$tm[4]=$x+$tm[1]*$y-$tm[0]*$x;
+			$tm[5]=$y-$tm[0]*$y-$tm[1]*$x;
+			
+			$this->_out(sprintf('%.3F %.3F %.3F %.3F %.3F %.3F cm', $tm[0],$tm[1],$tm[2],$tm[3],$tm[4],$tm[5]));
+		}
 	}
 }
-?>

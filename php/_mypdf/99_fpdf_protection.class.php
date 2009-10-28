@@ -226,4 +226,3 @@ if (!defined('__CLASS_FPDF_PROTECTION__'))
 		}
 	}
 }
-?>

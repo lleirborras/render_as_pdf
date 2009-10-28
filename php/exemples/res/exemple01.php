@@ -28,8 +28,7 @@ table.morpion td.j2 { color: #A00; }
 	<br>
 	<small>Texte écrit avec small</small>, Texte écrit normalement, <big>Texte écrit avec big</big><br>
 	<br>
-	<span style="font-size: 20px">
-		A<sub>test d'<b>indice</b></sub> et N<sup>test d'<b>exposant</b></sup>, 
+	<span style="font-size: 20px">A<sub>test d'<b>indice</b></sub> et N<sup>test d'<b>exposant</b></sup>, 
 		test<sub>test<sub>test</sub></sub>, 
 		test<sup>test<sup>test</sup></sup>, 
 		test<sub>test<sup>test</sup></sub>.

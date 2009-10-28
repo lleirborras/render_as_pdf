@@ -3,10 +3,10 @@
  * Logiciel : HTML2PDF - classe styleHTML
  * 
  * Convertisseur HTML => PDF, utilise fpdf de Olivier PLATHEY 
- * Distribué sous la licence GPL. 
+ * Distribué sous la licence LGPL. 
  *
  * @author		Laurent MINGUET <webmaster@spipu.net>
- * @version		3.21 - 05/05/2009
+ * @version		3.25 - 07/10/2009
  */
  
 if (!defined('__CLASS_STYLEHTML__'))
@@ -21,7 +21,8 @@ if (!defined('__CLASS_STYLEHTML__'))
 		var $table		= array();		// tableau d'empilement pour historisation des niveaux
 		var $pdf		= null;			// référence au PDF parent
 		var $htmlColor	= array();		// liste des couleurs HTML
-
+		var $onlyLeft	= false;		// indique si on est dans un sous HTML et qu'on bloque à gauche
+		
 		/**
 		 * Constructeur
 		 *
@@ -218,6 +219,7 @@ if (!defined('__CLASS_STYLEHTML__'))
 			$this->value['font-underline']		= false;
 			$this->value['font-overline']		= false;
 			$this->value['font-linethrough']	= false;
+			$this->value['text-transform']		= 'none';
 			$this->value['font-size']			= $this->ConvertToMM('10pt');
 			$this->value['text-indent']			= 0;
 			$this->value['text-align']			= 'left';
@@ -235,6 +237,7 @@ if (!defined('__CLASS_STYLEHTML__'))
 			$this->value['left']				= null;
 			$this->value['float']				= null;
 			$this->value['display']				= null;
+			$this->value['rotate']				= null;
 
 			$this->value['color']				= array(0, 0, 0);
 			$this->value['background']			= array('color' => null, 'image' => null, 'position' => null, 'repeat' => null);
@@ -272,6 +275,7 @@ if (!defined('__CLASS_STYLEHTML__'))
 			$this->value['left']				= null;
 			$this->value['float']				= null;
 			$this->value['display']				= null;
+			$this->value['rotate']				= null;
 			$this->value['background']			= array('color' => null, 'image' => null, 'position' => null, 'repeat' => null);
 			$this->value['border']	= array(
 										't' => $this->readBorder('none'),
@@ -281,7 +285,8 @@ if (!defined('__CLASS_STYLEHTML__'))
 										'radius' => array(0, 0),
 										'collapse' => $collapse,
 									);
-									
+
+			if (!in_array($balise, array('h1', 'h2', 'h3', 'h4', 'h5', 'h6')))
 			$this->value['margin']	= array(
 									't' => 0,
 									'r' => 0,
@@ -386,6 +391,11 @@ if (!defined('__CLASS_STYLEHTML__'))
 			}
 		}
 
+		function restorePosition(&$current_x, &$current_y)
+		{
+			if ($this->value['y']==$current_y) $current_y = $this->value['yc'];
+		}
+		
 		function setPosition(&$current_x, &$current_y)
 		{
 			$this->value['xc'] = $current_x;
@@ -498,6 +508,8 @@ if (!defined('__CLASS_STYLEHTML__'))
 					
 			// interpreration des nouvelles valeurs
 			$correct_width = false;
+			$no_width = true;
+
 			foreach($styles as $nom => $val)
 			{
 				switch($nom)
@@ -528,6 +540,11 @@ if (!defined('__CLASS_STYLEHTML__'))
 						$this->value['text-indent']			= $this->ConvertToMM($val);
 						break;
 					
+					case 'text-transform':
+						if (!in_array($val, array('none', 'capitalize', 'uppercase', 'lowercase'))) $val = 'none';
+						$this->value['text-transform']		= $val;
+						break;
+						
 					case 'font-size':
 						$val = $this->ConvertToMM($val, $this->value['font-size']);
 						if ($val) $this->value['font-size'] = $val;
@@ -557,6 +574,7 @@ if (!defined('__CLASS_STYLEHTML__'))
 					case 'width':
 						$this->value['width'] = $this->ConvertToMM($val, $this->getLastWidth());
 						if ($this->value['width'] && substr($val, -1)=='%') $correct_width=true;
+						$no_width = false;
 						break;
 					
 					case 'height':
@@ -567,7 +585,11 @@ if (!defined('__CLASS_STYLEHTML__'))
 						if (preg_match('/^[0-9\.]+$/isU', $val)) $val = floor($val*100).'%';
 						$this->value['line-height'] = $val;
 						break;
-				
+					case 'rotate':
+						if (!in_array($val, array(0, -90, 90, 180, 270, -180, -270))) $val = null;
+						if ($val<0) $val+= 360;
+						$this->value['rotate'] = $val;
+						break;
 					case 'padding':
 						$val = explode(' ', $val);
 						foreach($val as $k => $v)
@@ -876,29 +898,39 @@ if (!defined('__CLASS_STYLEHTML__'))
 				}				
 			}
 
+			if ($this->onlyLeft) $this->value['text-align'] = 'left';
+			
 			// correction de la largeur pour correspondre au modèle de boite quick
-			if ($correct_width)
+			if ($no_width && in_array($balise, array('div')) && $this->value['position']!='absolute')
 			{
-				if (!in_array($balise, array('table', 'div', 'hr')))
-				{
-					$this->value['width']-= $this->value['padding']['l'] + $this->value['padding']['r'];
-					$this->value['width']-= $this->value['border']['l']['width'] + $this->value['border']['r']['width'];
-				}
-				if (in_array($balise, array('th', 'td')))
-				{
-					$this->value['width']-= $this->ConvertToMM(isset($param['cellspacing']) ? $param['cellspacing'] : '2px');
-				}
-				if ($this->value['width']<0) $this->value['width']=0;
+				$this->value['width'] = $this->getLastWidth();
+				$this->value['width']-= $this->value['margin']['l'] + $this->value['margin']['r'];
 			}
 			else
 			{
-				if ($this->value['width'])
+				if ($correct_width)
 				{
-					if ($this->value['border']['l']['width'])	$this->value['width']	+= $this->value['border']['l']['width'];
-					if ($this->value['border']['r']['width'])	$this->value['width']	+= $this->value['border']['r']['width'];			
-					if ($this->value['padding']['l'])			$this->value['width']	+= $this->value['padding']['l'];
-					if ($this->value['padding']['r'])			$this->value['width']	+= $this->value['padding']['r'];
-				}		
+					if (!in_array($balise, array('table', 'div', 'hr')))
+					{
+						$this->value['width']-= $this->value['padding']['l'] + $this->value['padding']['r'];
+						$this->value['width']-= $this->value['border']['l']['width'] + $this->value['border']['r']['width'];
+					}
+					if (in_array($balise, array('th', 'td')))
+					{
+						$this->value['width']-= $this->ConvertToMM(isset($param['cellspacing']) ? $param['cellspacing'] : '2px');
+					}
+					if ($this->value['width']<0) $this->value['width']=0;
+				}
+				else
+				{
+					if ($this->value['width'])
+					{
+						if ($this->value['border']['l']['width'])	$this->value['width']	+= $this->value['border']['l']['width'];
+						if ($this->value['border']['r']['width'])	$this->value['width']	+= $this->value['border']['r']['width'];			
+						if ($this->value['padding']['l'])			$this->value['width']	+= $this->value['padding']['l'];
+						if ($this->value['padding']['r'])			$this->value['width']	+= $this->value['padding']['r'];
+					}		
+				}
 			}
 			if ($this->value['height'])
 			{
@@ -981,7 +1013,15 @@ if (!defined('__CLASS_STYLEHTML__'))
 			if ($this->value['float']=='right')	return 'right';
 			return null;
 		}
-				
+		
+		function getParentBalise()
+		{
+			$nb = count($this->table);
+			if ($nb>0)
+				return $this->table[$nb-1]['id_balise'];
+			return null;
+		}
+		
 		function getLastAbsoluteX()
 		{
 			for($k=count($this->table); $k>0; $k--)
@@ -1434,4 +1474,3 @@ if (!defined('__CLASS_STYLEHTML__'))
 		}
 	}
 }
-?>

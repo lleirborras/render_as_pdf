@@ -3,7 +3,7 @@
  * Logiciel : exemple d'utilisation de HTML2PDF
  * 
  * Convertisseur HTML => PDF, utilise fpdf de Olivier PLATHEY 
- * Distribué sous la licence GPL. 
+ * Distribué sous la licence LGPL. 
  *
  * @author		Laurent MINGUET <webmaster@spipu.net>
  */
@@ -25,7 +25,7 @@
 	
 	// ajout de l'index (obligatoirement en fin de document)
 	$html2pdf->setNewPage();
-	$html2pdf->pdf->CreateIndex('Index', 25, 12);
+	$html2pdf->CreateIndex('Index', 25, 12);
 	
 	// envoie du PDF
 	$html2pdf->Output('about.pdf');

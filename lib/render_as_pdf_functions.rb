@@ -13,7 +13,11 @@ module RenderAsPdfFunctions
     File.open(php_filename, "wb") do |f|
       f.write(RenderAsPdf.file_header)
       html.split("\n").each do |s|
-        f.write(Iconv.new('ISO-8859-15//IGNORE//TRANSLIT', 'utf-8').iconv(s))
+        begin
+          f.write(Iconv.new('ISO-8859-15//IGNORE//TRANSLIT', 'utf-8').iconv(s))
+        rescue  => e
+          f.write(s)
+        end
       end
       f.write(RenderAsPdf.file_footer(pdf_filename))
     end
@@ -31,7 +35,7 @@ module RenderAsPdfFunctions
       pdf_string = f.read
       temp_filename = File.join(File.dirname(f.path), File.basename(pdf_filename, ".*"))
     end
-    FileUtils.rm(temp_filename + ".php")
+#    FileUtils.rm(temp_filename + ".php")
     FileUtils.rm(temp_filename + ".pdf")
     return pdf_string
   end
